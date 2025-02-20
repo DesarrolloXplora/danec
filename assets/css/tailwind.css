@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.color-main {
+    color: #f70030;
+}
+.bg-main {
+    background-color: #f70030;
+}
+.color-dark {
+    color: #0a0806;
+}
+
+body {
+    @apply bg-gray-50;
+}
+
+@layer components {
+    .btn {
+        @apply bg-[#f70030] text-white px-3 py-2 rounded-md text-sm;
+    }
+    .card {
+        @apply p-3 rounded-md bg-white shadow-md h-full;
+    }
+}

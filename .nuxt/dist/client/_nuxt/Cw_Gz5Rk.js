@@ -1,0 +1,1 @@
+import{_ as o,c as s,o as t,K as c}from"./B1MNqmDI.js";const n={},r={class:"mx-auto p-4 login-bg"};function a(e,l){return t(),s("div",r,[c(e.$slots,"default")])}const d=o(n,[["render",a]]);export{d as default};

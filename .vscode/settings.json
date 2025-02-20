@@ -1,0 +1,7 @@
+{
+  "cSpell.words": [
+    "Nuxt"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/43ac0818-e995-42ed-b100-2211b7bf0452/resourceGroups/GRBbox/providers/Microsoft.Web/sites/danec-xplora",
+  "appService.deploySubpath": "."
+}
