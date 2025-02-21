@@ -5,21 +5,13 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   app: {
     head: {
-      title: 'Programa',
-      meta: [{ name: 'description', 'data-context': 'programa' }],
+      title: 'Danec',
+      meta: [{ name: 'description', 'data-context': 'Danec' }],
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap' },
+        { rel: 'icon', type: 'image/x-icon', href: 'https://storage.googleapis.com/static-content-seed/danec/logo-red.png' }
       ]
-    }
-  },
-  nitro: {
-    azure: {
-      config: {
-        platform: {
-          apiRuntime: 'node:18'
-        }
-      }
     }
   }
 })

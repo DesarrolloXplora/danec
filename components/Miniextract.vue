@@ -1,27 +1,27 @@
 <template>
   <div class="bg-white rounded p-4 shadow-none">
     <!-- Title -->
-    <div class="font-bold text-center text-ml mb-4">
-      Actualización de mis puntos
-    </div>
+    <Head>
+      <Title>Danec | Actualización de mis puntos</Title>
+    </Head>
     <!-- Table -->
-    <table class="miniextract w-full">
-      <thead class="primary_color text-center headTable">
+    <table class="miniextract w-full my-4">
+      <thead class="bg-main text-center head-table text-white">
       <tr>
-        <th class="borderTableLeft p-2">Punto de Venta</th>
+        <th class="border-table-left p-2">Participante</th>
         <th class="p-2">
           <img
               src="https://storage.googleapis.com/static-content-seed/celima/icons/meses.png"
               alt="Meses"
-              class="indicatorImg inline-block mr-1"
+              class="indicator-img inline-block mr-1"
           />
-          Puntos cargados última vez
+          Puntos cargados por última vez
         </th>
         <th class="p-2">
           <img
               src="https://storage.googleapis.com/static-content-seed/celima/icons/acumulados.png"
               alt="Acumulados"
-              class="indicatorImg inline-block mr-1"
+              class="indicator-img inline-block mr-1"
           />
           Puntos acumulados
         </th>
@@ -29,20 +29,18 @@
           <img
               src="https://storage.googleapis.com/static-content-seed/celima/icons/canjeados.png"
               alt="Canjeados"
-              class="indicatorImg inline-block mr-1"
+              class="indicator-img inline-block mr-1"
           />
           Puntos cargados
         </th>
-        <!--
-        <th class="borderTableRight p-2">
+        <th class="border-table-right p-2">
           <img
             src="https://storage.googleapis.com/static-content-seed/celima/icons/disponibles.png"
             alt="Disponibles"
-            class="indicatorImg inline-block mr-1"
+            class="indicator-img inline-block mr-1"
           />
           Puntos disponibles
         </th>
-        -->
       </tr>
       </thead>
       <tbody>
@@ -51,7 +49,7 @@
         <td class="p-2">{{ item.lastMonth }}</td>
         <td class="p-2">{{ item.won }}</td>
         <td class="p-2">{{ item.spent || 0 }}</td>
-        <!-- <td class="p-2">{{ item.total }}</td> -->
+        <td class="p-2">{{ item.total }}</td>
       </tr>
       </tbody>
     </table>
@@ -61,14 +59,65 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// Sample data for demonstration—replace with your actual data source or props.
 const points = ref([
-  { name: '1', pdv: 'Tienda A', lastMonth: 50, won: 200, spent: 100 },
-  { name: '2', pdv: 'Tienda B', lastMonth: 30, won: 150, spent: 50 }
+  { name: '1', pdv: 'Participante 1', lastMonth: "Abril", won: 200, spent: 100, total: 100 }
 ])
 </script>
 
 <style scoped>
-/* If you have custom classes (e.g., primary_color, secondary_color, borderTableLeft, etc.),
-   ensure they are defined in your Tailwind configuration or add additional CSS here. */
+.head-table{
+  .border-table-left{
+    border-top-left-radius: 20px;
+  }
+  .border-table-right{
+    border-top-right-radius: 20px
+  }
+}
+.letter-row{
+  font-weight: bold;
+}
+.miniextract{
+  margin: 0 auto;
+}
+.miniextract thead {
+  text-align: left;
+  border-bottom: 1px;
+  font-weight: 800;
+  height: 70px;
+}
+.miniextract thead tr th:first-child {
+  padding-left: 3rem!important;
+  padding: 1rem;
+  width: fit-content;
+}
+
+.miniextract thead tr.secondary-tr{
+  background: var(--secondary-color);
+}
+.miniextract thead tr th {
+    color: white !important;
+    text-transform: uppercase;
+    width: 20%;
+    padding-left: 60px !important;
+    position: relative;
+    font-size: 0.75rem;
+    font-weight: bolder;
+    border-bottom: dotted;
+}
+.indicator-img{
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  left: 0;
+  filter: brightness(0) invert(1);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.miniextract tbody tr {
+  text-align: center;
+  border-style: dotted;
+}
+.miniextract tbody{
+  border-bottom: dotted;
+}
 </style>

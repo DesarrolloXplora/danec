@@ -1,7 +1,7 @@
 <template>
 <div>
   <Head>
-    <Title>Programa | Catálogo</Title>
+    <Title>Danec | Catálogo</Title>
   </Head>
   <div class="grid grid-cols-4 gap-5">
     <div v-for="product in products" :key="product.id">

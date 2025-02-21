@@ -1,7 +1,7 @@
 <template>
   <div>
     <Head>
-      <Title>Programa | {{ product.title }}</Title>
+      <Title>Danec | {{ product.title }}</Title>
     </Head>
     <ProductDetails :product="product"/>
   </div>

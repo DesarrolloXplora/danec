@@ -148,8 +148,12 @@ const barSkill = ref(50) // Example value; update as needed
 const check = ref(false)
 
 const fields = ref([
-  { index: 1, type: 'text', value: '', name: 'Nombre', disabled: false },
-  { index: 2, type: 'email', value: '', name: 'Correo', disabled: false }
+  { index: 1, type: 'text', value: 'Pedro', name: 'Nombre', disabled: false },
+  { index: 2, type: 'text', value: 'Gomez', name: 'Apellido', disabled: false },
+  { index: 3, type: 'number', value: '5432123', name: 'Cédula', disabled: false },
+  { index: 4, type: 'text', value: '12-12-93', name: 'Fecha de nacimiento', disabled: false },
+  { index: 5, type: 'number', value: '32323344', name: 'RUC', disabled: false },
+  { index: 6, type: 'text', value: 'Pastelería S.A', name: 'Razón Social', disabled: false }
   // Add additional fields as necessary
 ])
 

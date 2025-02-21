@@ -26,14 +26,12 @@
         </li>
       </ul>
 
-      <!-- Dropdown for Account Links -->
       <div ref="dropdownRef" class="relative main-dropdown">
         <button
             @click="toggleDropdown"
             class="focus:outline-none flex items-center bg-main p-2 text-white"
             :aria-expanded="isOpen.toString()"
         >
-          <!-- Material Icon for user profile -->
           <span class="material-icons text-2xl">account_circle</span>
           <span class="material-icons text-2xl">keyboard_arrow_down</span>
         </button>
@@ -46,12 +44,14 @@
             <NuxtLink
                 to="/mi-cuenta"
                 class="block px-4 py-2 hover:bg-gray-100"
+                @click="closeDropdown"
             >
               Mi Cuenta
             </NuxtLink>
             <NuxtLink
                 to="/login"
                 class="block px-4 py-2 hover:bg-gray-100"
+                @click="closeDropdown"
             >
               Salir
             </NuxtLink>
@@ -71,6 +71,7 @@ const isOpen = ref(false)
 const dropdownRef = ref(null)
 
 const toggleDropdown = () => {
+  console.log(isOpen.value)
   isOpen.value = !isOpen.value
 }
 
