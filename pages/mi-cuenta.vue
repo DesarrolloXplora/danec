@@ -78,7 +78,7 @@
                     class="underline ml-1"
                     title="Ver documento"
                 >
-                  Términos y Condiciones
+                  TÉRMINOS Y CONDICIONES JUNTO CON EL TRATAMIENTO Y USO DE DATOS.
                 </a>
               </span>
             </label>

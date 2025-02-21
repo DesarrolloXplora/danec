@@ -1,6 +1,6 @@
 <template>
   <div>
-  <header class="shadow-sm bg-white">
+  <header class="shadow-sm bg-white after-red-bar">
     <nav class="container mx-auto p-4 flex justify-between items-center">
       <!-- Logo -->
       <NuxtLink to="/" class="font-bold">
@@ -8,7 +8,7 @@
       </NuxtLink>
 
       <!-- Navigation Links -->
-      <ul class="flex gap-4">
+      <ul class="flex gap-4 uppercase">
         <li>
           <NuxtLink to="/bienvenido">Inicio</NuxtLink>
         </li>
@@ -107,7 +107,15 @@ onMounted(() => {
   height: 1.5rem;
   width: 100%;
 }
-/* Optional fade transition */
+.after-red-bar:after {
+  content: "";
+  position: absolute;
+  height: 10px;
+  top: 85px;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--primary-color);
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s;

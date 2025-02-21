@@ -1,35 +1,26 @@
 <template>
   <div class="flipbook-wrapper">
-    <Flipbook
-        class="flipbook"
-        :pages="pages"
-        :options="flipOptions"
-        v-slot="{ flipLeft, flipRight }"
-        @page-changed="onPageChanged">
-      <div class="flipbook-wrapper">
-        <!-- Render your pages or let the flipbook handle them -->
-        <!-- Place your external controls inside the slot -->
-        <div class="action-bar flex items-center justify-center space-x-4 p-4">
-          <button @click="flipLeft" class="p-2 text-2xl" aria-label="Flip Left">
-            <span class="material-icons">arrow_back</span>
-          </button>
-
-          <span class="text-lg font-medium">
-          Página {{ currentPage }} de {{ numPages }}
-        </span>
-
-          <button @click="flipRight" class="p-2 text-2xl" aria-label="Flip Right">
-            <span class="material-icons">arrow_forward</span>
-          </button>
-        </div>
-      </div>
-    </Flipbook>
+    <swiper
+        :modules="[Navigation, Pagination, Autoplay]"
+        :space-between="20"
+        :slides-per-view="1"
+        :loop="true"
+        :autoplay="{ delay: 30000 }"
+        pagination
+        navigation
+        class="h-full"
+    >
+      <swiper-slide v-for="(slide, index) in pages" :key="index" class="h-[80vh]">
+        <img :src="slide" alt="como funciona" class="w-auto h-full object-contain rounded-lg m-auto" />
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import Flipbook from 'flipbook-vue'
+import { ref } from 'vue'
+import {Autoplay, Navigation, Pagination} from "swiper/modules";
+import {Swiper, SwiperSlide} from "swiper/vue";
 
 // Array of image URLs for each page
 const pages = [
@@ -43,31 +34,14 @@ const pages = [
   'https://storage.googleapis.com/static-content-seed/danec/guia/8.webp',
 ]
 
-const flipOptions = {
-  width: "auto",
-  height: "auto",
-  showCover: true,
-  singlePage: true,
-}
-// Update currentPage only when the flipbook emits an event
-function onPageChanged(newPage) {
-  currentPage.value = newPage
-}
-
-
-const currentPage = ref(1)
-const numPages = pages.length
 </script>
 
 <style scoped>
-.flipbook {
-  padding-top: 3rem;
-  width: 90vw;
-  height: 85vh;
-}
 .flipbook-wrapper {
   display: flex;
   justify-content: center;
+  background: #1c1818;
+  height: 90vh;
 }
 
 /* Additional custom styles */

@@ -56,6 +56,7 @@
         >
           <div class="w-full">
             <PointsResumen :points="pdvs" :selected="selectedYear" :key="'res' + refreshing" />
+            <PointsPilarUno />
           </div>
         </div>
       </div>
