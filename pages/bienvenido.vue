@@ -24,7 +24,7 @@ const submitForm = () => {
 </script>
 <style>
 .main-hola {
-  background-size: auto;
+  background-size: cover;
   background-position: center -9rem;
   background-image: url("https://storage.googleapis.com/static-content-seed/danec/hola.png");
   background-repeat: no-repeat;

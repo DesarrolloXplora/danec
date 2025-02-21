@@ -69,23 +69,6 @@
           <!-- Checkboxes -->
           <div class="mt-4">
             <label class="flex items-center text-sm">
-              <input type="checkbox" v-model="check" required class="mr-2" />
-              <span>
-                Autorizo el
-                <a
-                    target="_blank"
-                    href="https://storage.googleapis.com/static-content-seed/celima/personales.pdf"
-                    class="underline ml-1"
-                    title="Ver documento"
-                >
-                  uso de datos
-                </a>
-                y envío de comunicación por correo electrónico y celular
-              </span>
-            </label>
-          </div>
-          <div class="mt-4">
-            <label class="flex items-center text-sm">
               <input type="checkbox" v-model="user.terms" required class="mr-2" />
               <span>
                 Acepto
@@ -144,8 +127,7 @@ const user = ref({
   avatar: '',
   terms: false
 })
-const barSkill = ref(50) // Example value; update as needed
-const check = ref(false)
+const barSkill = ref(50)
 
 const fields = ref([
   { index: 1, type: 'text', value: 'Pedro', name: 'Nombre', disabled: false },
@@ -171,7 +153,7 @@ function onFileChange(file: File | File[]) {
 
 function saveAccount() {
   // Implement your save logic here (e.g. API calls, form validation, etc.)
-  console.log('Account data:', { fields: fields.value, user: user.value, check: check.value })
+  console.log('Account data:', { fields: fields.value, user: user.value })
 }
 
 function saveImage() {

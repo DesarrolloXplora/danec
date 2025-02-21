@@ -1,54 +1,29 @@
 <template>
   <div class="flipbook-wrapper">
-    <Flipbook class="flipbook" :pages="pages" :options="flipOptions" ref="flipbookRef" />
-    <div class="action-bar flex items-center justify-center space-x-4 p-4">
-      <!-- Left arrow -->
-      <button
-          @click="flipLeft"
-          :class="{'opacity-50 cursor-not-allowed': !canFlipLeft}"
-          class="p-2 text-2xl"
-          aria-label="Flip Left"
-      >
-        <span class="material-icons">arrow_back</span>
-      </button>
+    <Flipbook
+        class="flipbook"
+        :pages="pages"
+        :options="flipOptions"
+        v-slot="{ flipLeft, flipRight }"
+        @page-changed="onPageChanged">
+      <div class="flipbook-wrapper">
+        <!-- Render your pages or let the flipbook handle them -->
+        <!-- Place your external controls inside the slot -->
+        <div class="action-bar flex items-center justify-center space-x-4 p-4">
+          <button @click="flipLeft" class="p-2 text-2xl" aria-label="Flip Left">
+            <span class="material-icons">arrow_back</span>
+          </button>
 
-      <!-- Zoom in -->
-      <button
-          @click="zoomIn"
-          :class="{'opacity-50 cursor-not-allowed': !canZoomIn}"
-          class="p-2 text-2xl"
-          aria-label="Zoom In"
-      >
-        <span class="material-icons">magnify_plus</span>
-      </button>
+          <span class="text-lg font-medium">
+          Página {{ currentPage }} de {{ numPages }}
+        </span>
 
-      <!-- Page Indicator -->
-      <span class="text-lg font-medium">
-        Page {{ currentPage }} of {{ numPages }}
-      </span>
-
-      <!-- Zoom out -->
-      <button
-          @click="zoomOut"
-          :class="{'opacity-50 cursor-not-allowed': !canZoomOut}"
-          class="p-2 text-2xl"
-          aria-label="Zoom Out"
-      >
-        <span class="material-icons">magnify_minus</span>
-      </button>
-
-      <!-- Right arrow -->
-      <button
-          @click="flipRight"
-          :class="{'opacity-50 cursor-not-allowed': !canFlipRight}"
-          class="p-2 text-2xl"
-          aria-label="Flip Right"
-      >
-        <span class="material-icons">arrow_forward</span>
-      </button>
-    </div>
-
-  <!-- Action Bar -->
+          <button @click="flipRight" class="p-2 text-2xl" aria-label="Flip Right">
+            <span class="material-icons">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </Flipbook>
   </div>
 </template>
 
@@ -56,8 +31,7 @@
 import { ref, computed } from 'vue'
 import Flipbook from 'flipbook-vue'
 
-
-// Array of image URLs for each PDF page
+// Array of image URLs for each page
 const pages = [
   'https://storage.googleapis.com/static-content-seed/danec/guia/1.webp',
   'https://storage.googleapis.com/static-content-seed/danec/guia/2.webp',
@@ -75,57 +49,32 @@ const flipOptions = {
   showCover: true,
   singlePage: true,
 }
-const flipbookRef = ref('flipbookRef')
+// Update currentPage only when the flipbook emits an event
+function onPageChanged(newPage) {
+  currentPage.value = newPage
+}
+
 
 const currentPage = ref(1)
 const numPages = pages.length
-
-const canFlipLeft = computed(() => currentPage.value > 1)
-const canFlipRight = computed(() => currentPage.value < numPages)
-const canZoomIn = ref(true)  // Adjust logic as needed
-const canZoomOut = ref(true) // Adjust logic as needed
-
-// Methods to simulate flipbook actions
-function flipLeft() {
-  if (canFlipLeft.value) {
-    currentPage.value--
-    console.log('Flipping left')
-    // Optionally call a method on flipbookRef.value
-  }
-}
-
-function flipRight() {
-  if (canFlipRight.value) {
-    currentPage.value++
-    console.log('Flipping right')
-  }
-}
-
-function zoomIn() {
-  console.log('Zooming in')
-}
-
-function zoomOut() {
-  console.log('Zooming out')
-}
 </script>
 
 <style scoped>
 .flipbook {
+  padding-top: 3rem;
   width: 90vw;
   height: 85vh;
-}.flipbook-wrapper {
-   display: flex;
-   justify-content: center;
- }
+}
+.flipbook-wrapper {
+  display: flex;
+  justify-content: center;
+}
 
-/* Add additional custom styles as needed, for example: */
+/* Additional custom styles */
 .flipbook-wrapper .flipbook-page {
-  /* This is a placeholder: target the correct class or element based on inspection */
   background: #fff;
   border: 1px solid #ddd;
 }
-
 
 .action-bar {
   position: absolute;
@@ -135,7 +84,8 @@ function zoomOut() {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: transparent;
+  z-index: 10000;
+  top: 100px;
 }
 
 .action-bar .btn {

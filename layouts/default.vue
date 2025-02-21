@@ -13,7 +13,7 @@
           <NuxtLink to="/bienvenido">Inicio</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/como-funciona">Cómo funciona</NuxtLink>
+          <NuxtLink to="/como-funciona">¿Qué es y Cómo funciona?</NuxtLink>
         </li>
         <li>
           <NuxtLink to="/mis-puntos">Mis Puntos</NuxtLink>
