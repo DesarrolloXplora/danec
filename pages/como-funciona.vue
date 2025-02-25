@@ -42,6 +42,7 @@ const pages = [
   justify-content: center;
   background: #1c1818;
   height: 90vh;
+  z-index: 10;
 }
 
 /* Additional custom styles */

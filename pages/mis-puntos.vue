@@ -1,6 +1,6 @@
 <template>
   <div class="w-full pb-0">
-    <div class="flex flex-col min-h-screen">
+    <div class="flex flex-col h-fit">
       <div class="w-full md:w-10/12 mx-auto self-center">
         <div v-if="!route.query.print" class="mt-12 flex flex-wrap -mx-2">
           <!-- Year Select -->

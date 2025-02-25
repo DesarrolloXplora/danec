@@ -17,7 +17,8 @@
                 v-model="email"
                 required
                 placeholder="Usuario"
-                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400"
+                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 placeholder:text-center"
+
             />
           </div>
           <div class="mb-4">
@@ -27,7 +28,7 @@
                 v-model="password"
                 required
                 placeholder="Contraseña"
-                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400"
+                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 placeholder:text-center"
             />
           </div>
           <button type="submit"
@@ -35,17 +36,15 @@
           >
             Entrar
           </button>
-          <a href=""></a>
         </form>
       </div>
-      <!-- New section: "click aquí" with a caret down and a centered logo -->
       <div class="self-center mt-4 flex flex-col items-center" @click="goToDanec">
         <span class="text-sm text-white flex items-center gap-1 cursor-pointer">
           click aquí
           <span class="material-icons text-sm">keyboard_arrow_down</span>
         </span>
         <div class="mt-0">
-          <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" alt="Logo" class="w-24" />
+          <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" alt="Logo" class="w-44" />
         </div>
       </div>
     </div>

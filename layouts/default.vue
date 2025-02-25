@@ -8,12 +8,12 @@
       </NuxtLink>
 
       <!-- Navigation Links -->
-      <ul class="flex gap-4 uppercase">
+      <ul class="hidden md:flex gap-12 uppercase text-sm">
         <li>
-          <NuxtLink to="/bienvenido">Inicio</NuxtLink>
+          <NuxtLink to="/">Inicio</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/como-funciona">¿Qué es y Cómo funciona?</NuxtLink>
+          <NuxtLink to="/como-funciona">¿CÓMO GANO?</NuxtLink>
         </li>
         <li>
           <NuxtLink to="/mis-puntos">Mis Puntos</NuxtLink>
@@ -26,10 +26,10 @@
         </li>
       </ul>
 
-      <div ref="dropdownRef" class="relative main-dropdown">
+      <div ref="dropdownRef" class="relative main-dropdown hidden md:block">
         <button
             @click="toggleDropdown"
-            class="focus:outline-none flex items-center bg-main p-2 text-white"
+            class="focus:outline-none flex items-center bg-main px-2 text-white"
             :aria-expanded="isOpen.toString()"
         >
           <span class="material-icons text-2xl">account_circle</span>
@@ -39,7 +39,7 @@
         <transition name="fade">
           <div
               v-if="isOpen"
-              class="absolute right-0 mt-2 w-48 bg-white shadow-lg border rounded"
+              class="absolute right-0 mt-2 w-48 bg-white shadow-lg border rounded z-20"
           >
             <NuxtLink
                 to="/mi-cuenta"
@@ -58,17 +58,63 @@
           </div>
         </transition>
       </div>
+      <!-- Mobile Hamburger Icon (shown on mobile only) -->
+      <button class="md:hidden focus:outline-none" @click="toggleMobileMenu">
+        <span class="material-icons text-3xl">menu</span>
+      </button>
     </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <transition name="fade">
+      <div v-if="isMobileMenuOpen" class="md:hidden bg-white shadow-lg">
+        <ul class="flex flex-col gap-2 p-4">
+          <li>
+            <NuxtLink to="/">Inicio</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/como-funciona">¿CÓMO GANO?</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/mis-puntos">Mis Puntos</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/catalogo">Catálogo</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/mis-canjes">Mis Canjes</NuxtLink>
+          </li>
+          <!-- Optionally include profile links within mobile menu -->
+          <li class="border-t pt-2">
+            <NuxtLink to="/mi-cuenta" @click="toggleMobileMenu">Mi Cuenta</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/login" @click="toggleMobileMenu">Salir</NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </transition>
   </header>
   <slot></slot>
+  <div v-if="showFloatingButton" class="companion w-screen sticky" @click="goToDanec">
+    <div class="flex flex-wrap mt-8">
+      <div class="w-full md:w-5/12 md:ml-auto px-4">
+        <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" alt="Logo" class="w-44 float-right cursor-pointer drop-shadow-md" />
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const showFloatingButton = computed(() => route.path !== '/como-funciona')
 
 const isOpen = ref(false)
 const dropdownRef = ref(null)
+const isMobileMenuOpen = ref(false)
 
 const toggleDropdown = () => {
   console.log(isOpen.value)
@@ -78,6 +124,14 @@ const toggleDropdown = () => {
 const closeDropdown = () => {
   isOpen.value = false
 }
+
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+
+const goToDanec = () => {
+  window.open("https://grupodanec.com.ec/", '_blanc')
+};
 
 onMounted(() => {
   // Ensure the function runs only on the client
@@ -94,7 +148,7 @@ onMounted(() => {
 .main-dropdown:before {
   content: "";
   position: absolute;
-  top: -2rem;
+  top: -1.99rem;
   background: #f70030;
   height: 2rem;
   width: 100%;
@@ -102,7 +156,7 @@ onMounted(() => {
 .main-dropdown:after {
   content: "";
   position: absolute;
-  bottom: -1.5rem;
+  bottom: -1.4rem;
   background: #f70030;
   height: 1.5rem;
   width: 100%;
@@ -113,7 +167,7 @@ onMounted(() => {
   height: 10px;
   top: 85px;
   width: 100%;
-  z-index: 1000;
+  z-index: 10;
   background-color: var(--primary-color);
 }
 .fade-enter-active,
@@ -123,5 +177,9 @@ onMounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.companion {
+  bottom: 8%;
+  z-index: 1;
 }
 </style>

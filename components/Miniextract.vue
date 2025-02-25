@@ -31,7 +31,7 @@
               alt="Canjeados"
               class="indicator-img inline-block mr-1"
           />
-          Puntos cargados
+          Puntos canjeados
         </th>
         <th class="border-table-right p-2">
           <img
@@ -44,7 +44,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="item in points" :key="item.name" class="text-center secondary_color">
+      <tr v-for="item in points" :key="item.name" class="text-center">
         <td class="p-2">{{ item.pdv }}</td>
         <td class="p-2">{{ item.lastMonth }}</td>
         <td class="p-2">{{ item.won }}</td>
@@ -60,7 +60,7 @@
 import { ref } from 'vue'
 
 const points = ref([
-  { name: '1', pdv: 'Participante 1', lastMonth: "Abril", won: 200, spent: 100, total: 100 }
+  { name: '1', pdv: 'Participante 1', lastMonth: "Abril 12", won: 200, spent: 100, total: 100 }
 ])
 </script>
 
@@ -102,7 +102,6 @@ const points = ref([
     position: relative;
     font-size: 0.75rem;
     font-weight: bolder;
-    border-bottom: dotted;
 }
 .indicator-img{
   width: 3rem;
@@ -115,9 +114,9 @@ const points = ref([
 }
 .miniextract tbody tr {
   text-align: center;
-  border-style: dotted;
+  line-height: 4rem;
 }
 .miniextract tbody{
-  border-bottom: dotted;
+  border-bottom: solid 1px black;
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
-  <div class="min-h-screen flex justify-end items-center sm:p-6 lg:px-24 main-hola">
-    <div class="flex flex-col items-end xl:w-1/3 lg:w-1/2 sm:w-auto">
+  <div class="h-full lg:h-96 flex justify-end items-center sm:p-6 lg:px-24">
+    <div class="main-hola"></div>
+    <div class="flex flex-col items-end xl:w-2/5 lg:w-1/2 sm:w-auto">
       <!-- White login panel -->
       <div class="w-full p-12 rounded-3xl text-center">
-        <p class="text-5xl uppercase text-bold py-2">¡Hola!</p>
-        <p class="text-2xl uppercase py-2">Nombre Apellido</p>
+        <p class="text-7xl uppercase font-[700] py-8 mt-16">¡Hola!</p>
+        <p class="text-4xl uppercase pt-5 pb-2">Nombre Apellido</p>
         <p class="text-xl uppercase font-bold py-2">"Pastelería ABC"</p>
         <button type="button" @click="submitForm"
-                class="w-full bg-main text-white py-2 rounded-3xl hover:bg-main transition duration-200 uppercase"
+                class="w-min text-xl font-[700] bg-main text-white py-2 px-6 mt-8 rounded-3xl hover:bg-main transition duration-200 uppercase"
         >
           Continuar
         </button>
@@ -24,8 +25,14 @@ const submitForm = () => {
 </script>
 <style>
 .main-hola {
+  position: absolute;
+  z-index: -1;
+  top: -5rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background-size: cover;
-  background-position: center -9rem;
+  background-position: center;
   background-image: url("https://storage.googleapis.com/static-content-seed/danec/hola.png");
   background-repeat: no-repeat;
 }

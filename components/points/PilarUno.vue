@@ -14,17 +14,17 @@
         <div v-if="!loading" class="overflow-x-auto">
           <table class="min-w-full pilares">
             <thead class="text-center headTable">
-            <tr class="primary-tr bg-gray-200">
-              <th class="borderTableLeft px-4 py-2">COMPRAS</th>
+            <tr class="primary-tr bg-main text-white">
+              <th class="rounded-l-3xl px-4 py-2">COMPRAS</th>
               <th></th>
               <th></th>
-              <th class="text-right border-table-right px-4 py-2">{{ period }}</th>
+              <th class="text-right rounded-r-3xl px-4 py-2">{{ period }}</th>
             </tr>
-            <tr class="bg-gray-100">
-              <th class="px-4 py-2">RUC</th>
+            <tr class="bg-gray-200">
+              <th class="rounded-l-3xl px-4 py-2">RUC</th>
               <th class="px-4 py-2">Punto de Venta</th>
               <th class="px-4 py-2">COMPRA</th>
-              <th class="px-4 py-2">Puntos ganados</th>
+              <th class="px-4 py-2 rounded-r-3xl">Puntos ganados</th>
             </tr>
             </thead>
             <tbody>
@@ -38,7 +38,7 @@
               <td class="px-4 py-2">{{ item.extraInfo.result }}</td>
               <td class="px-4 py-2">{{ item.total }}</td>
             </tr>
-            <tr class="text-center font-bold border-t">
+            <tr class="text-center font-bold border-t bg-black text-white">
               <td colspan="2" class="px-4 py-2">Total Pilar 1</td>
               <td class="px-4 py-2">S/. {{ result || '0' }}</td>
               <td class="px-4 py-2">{{ total || '-' }}</td>
@@ -54,7 +54,7 @@
       <div class="w-full md:w-5/12 md:ml-auto px-4">
         <button
             @click="$router.push('/como-funciona')"
-            class="rounded secondary_color primary-btn font-bold float-right px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+            class="bg-main font-[600] rounded-2xl float-right px-4 py-2 text-white text-xs"
         >
           *Click para saber cómo ganas puntos
         </button>

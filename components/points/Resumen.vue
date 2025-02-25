@@ -17,7 +17,7 @@
           <th class="border-r px-4 py-2 rounded-tr-3xl"></th>
         </tr>
         <!-- Second Header Row -->
-        <tr class="bg-main border-t-8 border-t-slate-100">
+        <tr class="bg-main border-t-8 border-t-slate-100 text-white">
           <th class="px-4 py-2">Punto de Venta</th>
           <th v-for="period in periods" :key="period" class="px-4 py-2">
             Puntos
@@ -29,9 +29,9 @@
         <tr
             v-for="(item, ind) in showing"
             :key="ind"
-            class="text-center text-gray-700 border-t"
+            class="text-center text-black border-t"
         >
-          <td class="border px-4 py-2">{{ item[0].pdv }}</td>
+          <td class="border px-4 py-2 font-[600] uppercase">{{ item[0].pdv }}</td>
           <td
               v-for="(period, key) in periods"
               :key="key"

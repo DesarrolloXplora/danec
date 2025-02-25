@@ -1,11 +1,11 @@
 <template>
   <div class="form-bg">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto md:px-16">
       <div class="flex flex-col md:flex-row justify-center items-start">
         <!-- Left Column -->
-        <div class="w-full md:w-1/3 p-4">
+        <div class="w-full md:w-1/3 p-4 pt-10">
           <div class="mx-auto">
-            <div class="text-center font-extrabold text-2xl text-primary_color">
+            <div class="text-center font-bold text-4xl text-black">
               Apunta <br /> tus datos
             </div>
             <div class="text-center my-6">
@@ -21,24 +21,24 @@
               </div>
               <!-- Progress Bar -->
               <div
-                  class="relative mt-8 mx-auto"
-                  style="width: 35%; height: 25px; border-radius: 20px; background-color: #e5e7eb;"
+                  class="relative mt-8 mx-auto rounded-full"
+                  style="width: 35%; height: 25px; background-color: #b0b3b8;"
               >
                 <div
-                    :style="{ width: Math.ceil(barSkill) + '%', backgroundColor: '#2bb8d9' }"
-                    class="h-full rounded"
+                    :style="{ width: Math.ceil(barSkill) + '%', backgroundColor: '#000' }"
+                    class="h-full rounded-full"
                 ></div>
-                <div class="absolute inset-0 flex justify-center items-center">
+                <div class="absolute text-white inset-0 flex justify-center items-center  rounded-full">
                   <strong>{{ Math.ceil(barSkill) }}%</strong>
                 </div>
               </div>
               <!-- Description & Change Password Link -->
-              <p class="mt-6 mx-10 text-sm text-secondary_color">
+              <p class="mt-6 mx-10 text-xs text-secondary_color">
                 *Debes cumplir el <span class="font-bold">100%</span> para ver el contenido
               </p>
               <NuxtLink
                   to="/password"
-                  class="bg-secondary_color mb-4 font-bold uppercase inline-block py-2 px-4 rounded"
+                  class="bg-main mb-4 text-sm font-bold uppercase text-white inline-block py-1 px-2 mt-4 rounded-full"
               >
                 Cambiar contraseña
               </NuxtLink>
@@ -46,7 +46,7 @@
           </div>
         </div>
         <!-- Right Column -->
-        <div class="w-full md:w-2/3 p-4 text-secondary_color">
+        <div class="w-full md:w-2/3 p-4 pt-10 text-secondary_color">
           <p class="text-left text-sm mb-4">
             <span class="text-primary_color">*</span> Campos Obligatorios
           </p>
@@ -54,14 +54,14 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div v-for="r in fields" :key="r.index" class="py-1">
               <div v-if="r.type !== 'button'">
-                <label class="block text-sm font-medium mb-1">
+                <label class="block uppercase text-sm font-[400] mb-1">
                   {{ r.name }} *
                 </label>
                 <input
                     v-model="r.value"
                     :type="r.type"
                     :readonly="r.disabled"
-                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                    class="w-full uppercase border-0 font-[700] border-b border-dotted border-black focus:border-gray-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -109,7 +109,7 @@
           />
         </div>
         <div class="mt-4 flex justify-end">
-          <button @click="saveImage" class="bg-blue-700 text-white px-4 py-2 rounded">
+          <button @click="saveImage" class="bg-main text-white px-4 py-2 rounded">
             Guardar
           </button>
         </div>
@@ -134,8 +134,14 @@ const fields = ref([
   { index: 2, type: 'text', value: 'Gomez', name: 'Apellido', disabled: false },
   { index: 3, type: 'number', value: '5432123', name: 'Cédula', disabled: false },
   { index: 4, type: 'text', value: '12-12-93', name: 'Fecha de nacimiento', disabled: false },
+  { index: 3, type: 'number', value: '5432123', name: 'Celular', disabled: false },
+  { index: 4, type: 'text', value: '12-12-93', name: 'Fecha de vencimiento cédula', disabled: false },
   { index: 5, type: 'number', value: '32323344', name: 'RUC', disabled: false },
-  { index: 6, type: 'text', value: 'Pastelería S.A', name: 'Razón Social', disabled: false }
+  { index: 6, type: 'text', value: 'Pastelería S.A', name: 'Razón Social', disabled: false },
+  { index: 6, type: 'text', value: '123123', name: 'Código de Cliente', disabled: false },
+  { index: 6, type: 'text', value: 'Cuenca', name: 'Ciudad', disabled: false },
+  { index: 6, type: 'text', value: 'Cuenca', name: 'Barrio', disabled: false },
+  { index: 6, type: 'text', value: 'Cuenca', name: 'Dirección', disabled: false }
   // Add additional fields as necessary
 ])
 

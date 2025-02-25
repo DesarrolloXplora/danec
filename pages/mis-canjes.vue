@@ -5,24 +5,24 @@
         <div class="px-4">
           <div class="pt-5"></div>
           <div class="bg-white">
-            <div class="bg-main font-bold flex justify-center text-lg text-white py-4 rounded-tl-3xl rounded-tr-3xl">
+            <div class="bg-main font-[700] flex justify-center text-4xl text-white py-8 mb-4 rounded-tl-[3rem] rounded-tr-[3rem]">
               ESTADO DE MI CANJE
             </div>
             <div v-if="!loading" class="overflow-auto">
               <table class="w-full">
-                <thead class="text-left text-xl font-bold border-b border-black text-primary">
+                <thead class="text-center text-xl text-white font-[700] bg-black border-black">
                 <tr>
-                  <th class="border-b border-black py-2">Producto</th>
-                  <th class="border-b border-black py-2">Código</th>
-                  <th class="border-b border-black py-2">Cantidad</th>
-                  <th class="border-b border-black py-2">Estado</th>
+                  <th class="text-center border-black py-2">Producto</th>
+                  <th class="text-center border-black py-2">Código</th>
+                  <th class="text-center border-black py-2">Cantidad</th>
+                  <th class="text-center border-black py-2">Estado</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr
                     v-for="item in exchanges"
                     :key="item.id"
-                    class="text-left text-secondary"
+                    class="text-center border-b-black"
                 >
                   <td class="font-medium py-2">{{ item.product.toUpperCase() }}</td>
                   <td class="py-2">{{ item.code }}</td>
