@@ -11,35 +11,31 @@ export const catalogService = {
 async function getAll() {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/catalogs`, {
+        const response = await $fetch(`${config.public.RED_BARON_URL}/catalogs`, {
             headers: authHeader()
         })
-        if (error.value) {
-            return handleResponse(error.value)
-        }
-        return handleResponse(data.value)
-    } catch (err) {
-        return handleResponse(err)
+        return handleResponse(response)
+    } catch (error) {
+        return handleResponse(error)
     }
 }
 
 async function get(id) {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/catalog/${id}`, {
+        const response = await $fetch(`${config.public.RED_BARON_URL}/catalog/${id}`, {
             headers: authHeader()
         })
-        if (error.value) return handleResponse(error.value)
-        return handleResponse(data.value)
-    } catch (err) {
-        return handleResponse(err)
+        return handleResponse(response)
+    } catch (error) {
+        return handleResponse(error)
     }
 }
 
 async function post(product) {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/catalogs`, {
+        const response = await $fetch(`${config.public.RED_BARON_URL}/catalogs`, {
             method: 'POST',
             headers: {
                 ...authHeader(),
@@ -47,9 +43,8 @@ async function post(product) {
             },
             body: JSON.stringify(product)
         })
-        if (error.value) return handleResponse(error.value)
-        return handleResponse(data.value)
-    } catch (err) {
-        return handleResponse(err)
+        return handleResponse(response)
+    } catch (error) {
+        return handleResponse(error)
     }
 }

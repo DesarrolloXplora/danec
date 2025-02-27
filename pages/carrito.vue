@@ -1,28 +1,13 @@
 <template>
   <div class="container mx-auto pt-4 min-h-[90vh] bg-white">
     <!-- Cart Card -->
-    <div class="bg-main text-black rounded shadow p-4">
-      <div class="text-center font-bold text-lg">
+    <div class="text-black rounded shadow p-4">
+      <div class="bg-main text-center uppercase font-bold p-5 text-lg text-slate-50">
         Carrito
       </div>
       <!-- Top Bar: PDV Selector & Total Points -->
       <div class="mt-4 flex flex-col md:flex-row justify-center items-center">
-        <div class="w-full md:w-1/2 p-2">
-          <select
-              v-model="buying"
-              @change="selectPdv(buying)"
-              class="w-full border rounded p-2 text-black"
-          >
-            <option
-                v-for="pdv in pdvs"
-                :key="pdv.ruc"
-                :value="pdv.ruc"
-            >
-              {{ pdv.pdv }}
-            </option>
-          </select>
-        </div>
-        <div class="w-full md:w-1/2 p-2 text-center">
+        <div class="w-full md:w-1/2 p-2 text-center self-end">
           <strong>PUNTOS: {{ totalPoints }}</strong>
         </div>
       </div>
@@ -60,14 +45,14 @@
                     <button
                         :disabled="item.quantity <= 0"
                         @click="order(item, false)"
-                        class="mx-2 bg-main text-black rounded-full p-2"
+                        class="mx-2 bg-main text-white font-bold rounded-full p-2"
                     >
                       <span class="material-icons">remove</span>
                     </button>
                     {{ item.quantity }}
                     <button
                         @click="order(item, true)"
-                        class="mx-2 bg-main text-black rounded-full p-2"
+                        class="mx-2 bg-main  text-white font-bold rounded-full p-2"
                     >
                       <span class="material-icons">add</span>
                     </button>
@@ -82,7 +67,7 @@
             <button
                 v-if="!dialog"
                 @click="dialog = true"
-                class="bg-main text-black px-4 py-2 rounded"
+                class="bg-main  text-white font-bold uppercase px-4 py-2 rounded"
             >
               Continuar
             </button>
@@ -92,7 +77,7 @@
           <p>No tiene artículos en el carrito</p>
           <button
               @click="goBack"
-              class="mt-4 bg-main text-black px-4 py-2 rounded"
+              class="mt-4 bg-main font-bold text-white px-4 py-2 rounded-2xl"
           >
             Volver
           </button>
@@ -100,17 +85,17 @@
       </div>
     </div>
     <!-- Exchange Modal -->
-    <Modal v-if="dialog" @exchanged="afterExchange" @close="dialog = false" />
+    <Exchange v-if="dialog" @exchanged="afterExchange" @close="dialog = false" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Modal from '~/components/Modal.vue'
 import { useAccountStore } from '~/stores/account'
 import { useCartItemStore } from '~/stores/cartItemStore'
 import { userService } from '~/services/userService'
+import { cartItemService } from "~/services/cartItemService.js";
 
 // Initialize stores and router
 const router = useRouter()
@@ -122,13 +107,7 @@ const dialog = ref(false)
 const buying = ref(null)
 
 // Computed: total points from the account store
-const totalPoints = computed(() => {
-  return accountStore.using &&
-  accountStore.points &&
-  accountStore.points[accountStore.using]
-      ? accountStore.points[accountStore.using].total
-      : 0
-})
+const totalPoints = computed(() => accountStore.currentPoints)
 
 // Computed: list of PDVs from the account store
 const pdvs = computed(() => {
@@ -137,9 +116,7 @@ const pdvs = computed(() => {
 
 // Computed: filter cart items for the active PDV
 const cartItems = computed(() => {
-  return cartItemStore.cart.filter(
-      (item) => item.ruc === accountStore.using
-  )
+  return cartItemStore.cart
 })
 
 // Navigation helper
@@ -169,6 +146,7 @@ async function order(item, add) {
     if (item.quantity > 0) {
       item.quantity--
       item.total -= item.product.price
+      await cartItemService.remove(item.id)
     }
   }
   try {
@@ -180,7 +158,7 @@ async function order(item, add) {
       catalog: item.catalog.id,
     })
     // Adjust the user's points accordingly
-    accountStore.points[accountStore.using].total -= add
+    accountStore.points[0].total -= add
         ? item.product.price
         : -item.product.price
     accountStore.updatePoints(accountStore.points)
@@ -205,6 +183,7 @@ onMounted(async () => {
   if (!buying.value) {
     buying.value = accountStore.using
   }
+  await cartItemStore.fetchCartItems()
 })
 
 // Load points from userService and update the account store

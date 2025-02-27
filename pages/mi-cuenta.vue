@@ -1,6 +1,6 @@
 <template>
-  <div class="form-bg">
-    <div class="container mx-auto md:px-16">
+  <div class="form-bg h-full">
+    <div class="container mx-auto md:px-16 py-6 h-full">
       <div class="flex flex-col md:flex-row justify-center items-start">
         <!-- Left Column -->
         <div class="w-full md:w-1/3 p-4 pt-10">
@@ -25,7 +25,7 @@
                   style="width: 35%; height: 25px; background-color: #b0b3b8;"
               >
                 <div
-                    :style="{ width: Math.ceil(barSkill) + '%', backgroundColor: '#000' }"
+                    :style="{ width: Math.ceil(barSkill) + '%', backgroundColor: '#faa55c' }"
                     class="h-full rounded-full"
                 ></div>
                 <div class="absolute text-white inset-0 flex justify-center items-center  rounded-full">
@@ -141,7 +141,8 @@ const fields = ref([
   { index: 6, type: 'text', value: '123123', name: 'Código de Cliente', disabled: false },
   { index: 6, type: 'text', value: 'Cuenca', name: 'Ciudad', disabled: false },
   { index: 6, type: 'text', value: 'Cuenca', name: 'Barrio', disabled: false },
-  { index: 6, type: 'text', value: 'Cuenca', name: 'Dirección', disabled: false }
+  { index: 6, type: 'text', value: 'Cuenca', name: 'Dirección', disabled: false },
+  { index: 6, type: 'text', value: 'Panaderías', name: 'Categoría', disabled: true }
   // Add additional fields as necessary
 ])
 
@@ -174,7 +175,5 @@ function saveImage() {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 100vw;
-  height: 100vh;
 }
 </style>

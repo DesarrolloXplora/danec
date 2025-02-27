@@ -1,8 +1,8 @@
 <template>
   <div class="container mx-auto pt-4">
-    <div class="flex flex-wrap">
+    <div class="flex">
       <!-- Filter Sidebar (desktop) -->
-      <div v-if="!isMobile" :class="[onGetSize ? 'left-0' : 'left-120', 'w-full md:w-1/4 p-4']">
+      <div v-if="!isMobile" class="hidden md:block md:w-1/4 p-4 sticky top-4">
         <CatalogFilter
             v-if="initialFilter.end"
             @filter="filterCategory"
@@ -11,14 +11,8 @@
             :pointsFilter="initialFilter"
         />
       </div>
-      <!-- Mobile Filter Button -->
-      <div v-if="isMobile" class="w-full md:w-1/4 p-4">
-        <button @click="isMobile = !isMobile" class="block w-full bg-primary text-white rounded px-4 py-2">
-          Filtros
-        </button>
-      </div>
       <!-- Main Content -->
-      <div class="w-full md:w-3/4 mx-auto">
+      <div class="w-full md:w-3/4 p-4">
         <!-- Top Bar: Cart, PDV Selector, and Total Points -->
         <div class="flex flex-wrap justify-around items-center mb-4">
           <div class="text-center cursor-pointer" @click="goto('/carrito')">
@@ -28,57 +22,47 @@
             </strong>
           </div>
           <div class="text-center">
-            <select v-model="buying" @change="selectPdv(buying)" class="border rounded p-2">
-              <option v-for="pdv in pdvs" :key="pdv.ruc" :value="pdv.ruc">
-                {{ pdv.pdv }}
-              </option>
-            </select>
-          </div>
-          <div class="text-center">
             <strong>PUNTOS: {{ totalPoints }}</strong>
           </div>
         </div>
         <!-- Product Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div v-for="offer in offers" :key="offer.id" class="flex flex-col items-center">
-            <div class="border rounded shadow-sm w-full">
-              <div class="p-2">
-                <img :src="offer.product.image" alt="Product Image" class="object-contain h-48 w-full" />
-              </div>
-              <div class="bg-gray-200 p-4 text-center">
-                <h2 class="text-primary font-bold uppercase mb-2">
-                  {{ offer.product.name }}<br />
-                  <span class="text-secondary">{{ offer.product.price }} Puntos</span>
-                </h2>
-                <p class="mb-2">{{ truncate(offer.product.detail) }}</p>
-                <button
-                    @click="addCartItem(offer.product.id, catalog.id, 1, offer.product.price)"
-                    class="w-full bg-primary text-white py-2 rounded flex items-center justify-center"
-                >
-                  <span class="material-icons mr-2">shopping_cart</span>
-                  canjear
-                </button>
-              </div>
-            </div>
-          </div>
+          <ProductCard
+              v-for="offer in offers"
+              :key="offer.id"
+              :product="offer.product"
+              :catalogId="catalog.id"
+              @redeem="addCartItem"
+              @showdetail="openProductDetail"
+          />
         </div>
       </div>
     </div>
+    <!-- Product Detail Modal -->
+    <ProductDetailModal
+        v-if="showModal"
+        :product="selectedProduct"
+        @close="closeProductModal"
+    />
   </div>
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import CatalogFilter from '~/components/CatalogFilter.vue'
+import ProductCard from '~/components/ProductCard.vue'
+import ProductDetailModal from '~/components/ProductDetailModal.vue'
 import { catalogService } from '~/services/catalogService'
 import { userService } from '~/services/userService'
 import { cartItemService } from '~/services/cartItemService'
 import { useAccountStore } from '~/stores/account'
-import { useCartItemStore } from '~/stores/cartItemStore'  // Use your cart item store
+import { useCartItemStore } from '~/stores/cartItemStore'
+import { useNotifications } from '~/composables/useNotifications'
 
 const router = useRouter()
 const accountStore = useAccountStore()
 const cartItemStore = useCartItemStore()
+const { showNotification } = useNotifications()
 
 // Local reactive state
 const catalog = ref({ offers: [] })
@@ -86,16 +70,15 @@ const isMobile = ref(false)
 const categories = ref([])
 const selected = ref('')
 const pointsFilter = ref({ start: 0, end: 0 })
-const buying = ref(null)
 const initialFilter = ref({ start: 0, end: 0 })
-const onGetSize = ref(false)
+const showModal = ref(false)
+const selectedProduct = ref(null)
 
 // Lifecycle: on mount, set responsive flags and load data
 onMounted(() => {
-  onGetSize.value = window.innerWidth <= 768
   isMobile.value = window.innerWidth <= 768
   window.addEventListener('resize', () => {
-    onGetSize.value = window.innerWidth <= 768
+    isMobile.value = window.innerWidth <= 768
   })
   loadProducts()
   loadPoints()
@@ -103,7 +86,7 @@ onMounted(() => {
 
 // Computed: filter offers based on category and price range
 const offers = computed(() => {
-  return catalog.value.offers.filter(f => {
+  return catalog.value.offers?.filter(f => {
     const categoryMatch = selected.value ? f.product.type.name === selected.value : true
     const startMatch = pointsFilter.value.start ? f.product.price >= pointsFilter.value.start : true
     const endMatch = pointsFilter.value.end ? f.product.price <= pointsFilter.value.end : true
@@ -112,16 +95,8 @@ const offers = computed(() => {
 })
 
 // Computed: total points from account store
-const totalPoints = computed(() => {
-  return accountStore.using && accountStore.points && accountStore.points[accountStore.using]
-      ? accountStore.points[accountStore.using].total
-      : 0
-})
-
-// Computed: list of PDVs from account store's points
-const pdvs = computed(() => {
-  return accountStore.points ? Object.values(accountStore.points) : []
-})
+const totalPoints = computed(() => accountStore.currentPoints)
+const won = computed(() => accountStore.pointsWon)
 
 // Navigation helper
 function goto(url) {
@@ -159,59 +134,50 @@ async function loadProducts() {
 async function loadPoints() {
   const pointsData = await userService.getMyPoints()
   accountStore.updatePoints(pointsData)
-  buying.value = accountStore.using
 }
 
 // Cart operations using cartItemService and cartItemStore
-async function addCartItem(productId, catalogId, amount, price) {
+async function addCartItem({ productId, catalogId, quantity, price }) {
   if (totalPoints.value < price) {
-    alert('¡Hola Campeón! no te alcanza para canjear este item.')
+    showNotification({ message: '¡Hola! no te alcanza para canjear este item.', type: 'error' })
     return
   }
   if (
-      accountStore.points &&
-      accountStore.points[accountStore.using] &&
-      accountStore.points[accountStore.using].won < 600
+      won < 1
   ) {
-    alert('¡Hola Campeón! Recuerda que debes acumular al menos 600 puntos para empezar a canjear.')
+    showNotification({ message: '¡Hola! Recuerda que debes acumular al menos 1 punto para empezar a canjear.', type: 'error' })
     return
   }
-  const item = { product: productId, catalog: catalogId, quantity: amount, ruc: accountStore.using }
+  const item = { product: productId, catalog: catalogId, quantity, ruc: accountStore.using }
   try {
     const response = await cartItemService.post(item)
     if (response) {
-      // Update cart item store
-      cartItemStore.addItem(item)
-      // Deduct the cost from the user's total points
-      accountStore.points[accountStore.using].total -= price
-      accountStore.updatePoints(accountStore.points)
-      alert('Producto añadido')
+      cartItemStore.addItem(item).then(() => {
+        accountStore.points[0].total -= price
+        accountStore.updatePoints(accountStore.points)
+        showNotification({ message: 'Producto añadido', type: 'success' })
+      })
     }
   } catch (err) {
     console.error('Error adding cart item:', err)
-    alert('Error al agregar el producto al carrito.')
+    showNotification({ message: 'Error al agregar el producto al carrito.', type: 'error' })
   }
 }
 
-function selectPdv(selectedValue) {
-  accountStore.updateUsing(selectedValue)
-  buying.value = selectedValue
+// Open the product detail modal
+function openProductDetail(product) {
+  selectedProduct.value = product
+  showModal.value = true
 }
 
-function truncate(str) {
-  return str.substring(0, 100)
+// Close the product detail modal
+function closeProductModal() {
+  showModal.value = false
+  selectedProduct.value = null
 }
 </script>
 
-<style scoped>
-.left-0 {
-  left: 0;
-}
-.left-120 {
-  left: 3rem;
-  padding-top: 0;
-  overflow-y: auto;
-  position: relative;
-}
-</style>
 
+<style scoped>
+/* No additional custom positioning needed as we're using sticky */
+</style>

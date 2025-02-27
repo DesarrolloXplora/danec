@@ -8,7 +8,7 @@
       </div>
       <!-- White login panel -->
       <div class="w-full bg-white p-7 rounded-3xl shadow-lg text-center">
-        <span class="text-4xl font-bold">¡Bienvenido!</span>
+        <span class="text-4xl font-bold text-black">¡Bienvenido!</span>
         <form @submit.prevent="submitForm" class="mt-5">
           <div class="mb-3">
             <input
@@ -17,8 +17,7 @@
                 v-model="email"
                 required
                 placeholder="Usuario"
-                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 placeholder:text-center"
-
+                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 text-center text-black"
             />
           </div>
           <div class="mb-4">
@@ -28,11 +27,12 @@
                 v-model="password"
                 required
                 placeholder="Contraseña"
-                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 placeholder:text-center"
+                class="mt-1 w-full px-3 py-2 border rounded-3xl focus:outline-none focus:ring focus:border-red-400 text-center text-black"
             />
           </div>
-          <button type="submit"
-                  class="w-full bg-main text-white py-2 rounded-3xl hover:bg-main transition duration-200"
+          <button
+              type="submit"
+              class="w-full bg-main text-white py-2 rounded-3xl hover:bg-main transition duration-200"
           >
             Entrar
           </button>
@@ -48,28 +48,40 @@
         </div>
       </div>
     </div>
+    <Notification />
   </div>
 </template>
-
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAccountStore } from '~/stores/account'
+import { useNotifications } from '~/composables/useNotifications.js'
+
 definePageMeta({
   layout: 'login'
 })
 
-import { ref } from 'vue';
+
 const router = useRouter()
+const accountStore = useAccountStore()
 
-const email = ref('');
-const password = ref('');
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
 
-const submitForm = () => {
-  console.log('Email:', email.value);
-  console.log('Password:', password.value);
-  router.push('/bienvenido')
-};
+const { showNotification } = useNotifications()
+const submitForm = async () => {
+  try {
+    await accountStore.login({ username: email.value, password: password.value })
+    router.push('/bienvenido')
+  } catch (error) {
+    showNotification({ message: error.message || 'Error en el login', type: 'error' })
+  }
+}
+
 const goToDanec = () => {
-  window.open("https://grupodanec.com.ec/", '_blanc')
-};
+  window.open("https://grupodanec.com.ec/", '_blank')
+}
 </script>
 <style scoped>
 

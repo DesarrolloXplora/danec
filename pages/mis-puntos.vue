@@ -68,7 +68,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const years = ref([2021, 2022, 2023])
+const years = ref([2025])
 const periods = ref(['Marzo', 'Abril', 'Mayo'])
 const selectedYear = ref(years.value[0])
 const selected = ref(periods.value[0])

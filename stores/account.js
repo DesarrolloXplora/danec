@@ -1,21 +1,23 @@
 // ~/stores/account.js
 import { defineStore } from 'pinia'
 import { userService } from '~/services/userService'
-import { useRouter } from 'vue-router'
 
 export const useAccountStore = defineStore('account', {
     state: () => ({
-        // Initial state: user is not logged in
-        status: { loggingIn: false, loggedIn: false, active: false },
         user: null,
+        status: { loggingIn: false, loggedIn: false, active: false },
         points: null,
-        using: null
+        using: 0
     }),
     getters: {
-        // Returns the current points for the active pdv (if available)
         currentPoints: (state) => {
-            return state.points && state.using && state.points[state.using]
-                ? state.points[state.using].total || 0
+            return state.points && state.points[0]
+                ? state.points[0].total || 0
+                : 0
+        },
+        pointsWon: (state) => {
+            return state.points && state.points[0]
+                ? state.points[0].won || 0
                 : 0
         }
     },
@@ -23,19 +25,20 @@ export const useAccountStore = defineStore('account', {
         async login({ username, password }) {
             this.status.loggingIn = true
             try {
-                // Call the userService login which returns the user profile
                 const user = await userService.login(username, password)
+                if (!user || !user.token) {
+                    throw new Error('Credenciales inválidas')
+                }
+                this.setUser(user)
                 this.status = { loggedIn: true, active: false }
-                this.user = user
-                // Redirect after login using the router
-                const router = useRouter()
-                router.push('/')
             } catch (error) {
                 this.status.loggingIn = false
                 this.user = null
-                // Optionally, you can throw or handle the error here
                 throw error
             }
+        },
+        setUser(user) {
+            this.user = user
         },
         logout() {
             userService.logout()
@@ -44,40 +47,27 @@ export const useAccountStore = defineStore('account', {
             this.points = null
             this.using = null
         },
-        updateUser(user) {
-            // Update the user information in the store
-            this.user = user
+        updatePoints(points) {
+            this.points = points
         },
         updateUsing(pdv) {
-            // Set the active pdv
             this.using = pdv
-        },
-        updatePoints(points) {
-            // Convert an array of points into an object keyed by pdv (ruc)
-            if (Array.isArray(points) && points.length > 0) {
-                const comp = {}
-                points.forEach((pdv) => {
-                    comp[pdv.ruc] = pdv
-                })
-                if (!this.using) {
-                    // Set active pdv if none is selected
-                    this.using = points[points.length - 1].ruc
-                }
-                this.points = comp
-            }
-        },
-        async refreshUser() {
-            try {
-                // Refresh user data from the backend
-                const refreshedUser = await userService.reload()
-                this.user = refreshedUser
-            } catch (error) {
-                console.error('Failed to refresh user', error)
-            }
-        },
-        validate(user) {
-            // Simple validation: update the user in the store
-            this.user = user
         }
+    },
+    persist: {
+        enabled: process.client,
+        strategies: [
+            {
+                key: 'account',
+                storage: {
+                    getItem: (key) =>
+                        typeof window !== 'undefined' ? localStorage.getItem(key) : null,
+                    setItem: (key, value) =>
+                        typeof window !== 'undefined' ? localStorage.setItem(key, value) : null,
+                    removeItem: (key) =>
+                        typeof window !== 'undefined' ? localStorage.removeItem(key) : null
+                }
+            }
+        ]
     }
 })

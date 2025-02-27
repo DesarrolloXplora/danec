@@ -95,19 +95,25 @@
     </transition>
   </header>
   <slot></slot>
-  <div v-if="showFloatingButton" class="companion w-screen sticky" @click="goToDanec">
+  <div v-if="showFloatingButton" class="companion w-screen sticky">
     <div class="flex flex-wrap mt-8">
       <div class="w-full md:w-5/12 md:ml-auto px-4">
-        <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" alt="Logo" class="w-44 float-right cursor-pointer drop-shadow-md" />
+        <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" @click="goToDanec"
+             alt="Logo" class="w-44 float-right cursor-pointer drop-shadow-md" />
       </div>
     </div>
   </div>
+  <Notification />
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useRoute } from 'vue-router'
+import { useNotifications } from '~/composables/useNotifications.js'
+import { userService } from "~/services/userService.js";
+import { useAccountStore } from "~/stores/account.js";
+const accountStore = useAccountStore()
 
 const route = useRoute()
 const showFloatingButton = computed(() => route.path !== '/como-funciona')
@@ -116,8 +122,14 @@ const isOpen = ref(false)
 const dropdownRef = ref(null)
 const isMobileMenuOpen = ref(false)
 
+
+const { showNotification } = useNotifications()
+async function loadPoints() {
+  const pointsData = await userService.getMyPoints()
+  accountStore.updatePoints(pointsData)
+}
+
 const toggleDropdown = () => {
-  console.log(isOpen.value)
   isOpen.value = !isOpen.value
 }
 

@@ -3,7 +3,7 @@
     <Head>
       <Title>Danec | {{ product.title }}</Title>
     </Head>
-    <ProductDetails :product="product"/>
+    <ProductDetailModal :product="product"/>
   </div>
 </template>
 <script setup>

@@ -1,9 +1,8 @@
 import { useRuntimeConfig } from '#app'
 import { authHeader, handleResponse } from './sessionHelper'
 
-export const cartItemService = {
+export const exchangeService = {
     post,
-    getAll,
     get,
     remove
 }
@@ -11,7 +10,7 @@ export const cartItemService = {
 async function post(body) {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/cartItem`, {
+        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/exchange`, {
             method: 'POST',
             headers: {
                 ...authHeader(),
@@ -26,25 +25,10 @@ async function post(body) {
     }
 }
 
-async function getAll() {
-    const config = useRuntimeConfig()
-    try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/cartItems/user`, {
-            headers: authHeader()
-        })
-        console.log(data)
-        console.log(error)
-        if (error.value) return handleResponse(error.value)
-        return handleResponse(data.value)
-    } catch (err) {
-        return handleResponse(err)
-    }
-}
-
 async function get(id) {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/cartItem/${id}`, {
+        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/exchange/${id}`, {
             headers: authHeader()
         })
         if (error.value) return handleResponse(error.value)
@@ -57,7 +41,7 @@ async function get(id) {
 async function remove(id) {
     const config = useRuntimeConfig()
     try {
-        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/cartItem/${id}`, {
+        const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/exchange/${id}`, {
             method: 'DELETE',
             headers: authHeader()
         })

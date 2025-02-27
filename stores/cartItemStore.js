@@ -53,6 +53,15 @@ export const useCartItemStore = defineStore('cartItemStore', {
         },
         clear() {
             this.cart = []
+        },
+        // New action: fetch cart items from the backend
+        async fetchCartItems() {
+            try {
+                const data = await cartItemService.getAll()
+                this.cart = data || []
+            } catch (error) {
+                console.error("Error fetching cart items:", error)
+            }
         }
     }
 })

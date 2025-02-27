@@ -35,8 +35,6 @@ async function login(username, password) {
     if (user.token) {
         // Instead of localStorage, update the Pinia store
         accountStore.setUser(user)
-    }
-    if (user.token) {
         // Fetch the full user profile with the auth header
         const { data: profileData, error: profileError } = await useFetch(
             `${config.public.RED_BARON_URL}/user`,
@@ -57,7 +55,7 @@ async function login(username, password) {
 function logout() {
     const accountStore = useAccountStore()
     // Clear the user from the Pinia store
-    accountStore.clearUser()
+    accountStore.$reset()
 }
 
 async function reload() {

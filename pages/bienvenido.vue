@@ -5,8 +5,8 @@
       <!-- White login panel -->
       <div class="w-full p-12 rounded-3xl text-center">
         <p class="text-7xl uppercase font-[700] py-8 mt-16">¡Hola!</p>
-        <p class="text-4xl uppercase pt-5 pb-2">Nombre Apellido</p>
-        <p class="text-xl uppercase font-bold py-2">"Pastelería ABC"</p>
+        <p class="text-4xl uppercase pt-5 pb-2">{{ name_canonical }}</p>
+        <p class="text-xl uppercase font-bold py-2">"{{ company_name }}"</p>
         <button type="button" @click="submitForm"
                 class="w-min text-xl font-[700] bg-main text-white py-2 px-6 mt-8 rounded-3xl hover:bg-main transition duration-200 uppercase"
         >
@@ -17,11 +17,23 @@
   </div>
 </template>
 <script setup>
-const router = useRouter();
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useAccountStore } from '~/stores/account'
+import { storeToRefs } from 'pinia'
+
+const router = useRouter()
+const accountStore = useAccountStore()
+
+// Extract user as a reactive property
+const { user } = storeToRefs(accountStore)
+// Create a computed property for name_canonical
+const name_canonical = computed(() => user.value?.name_canonical || '')
+const company_name = computed(() => user.value?.company_name || '')
 
 const submitForm = () => {
   router.push('/')
-};
+}
 </script>
 <style>
 .main-hola {
