@@ -127,13 +127,13 @@ async function getAll() {
 
 async function getMyPoints() {
     const config = useRuntimeConfig()
-    const { data, error } = await useFetch(`${config.public.RED_BARON_URL}/user/points`, {
+    const response = await $fetch(`${config.public.RED_BARON_URL}/user/points`, {
         headers: authHeader()
     })
-    if (error.value) {
-        return handleResponse(error.value)
+    if (response) {
+        return handleResponse(response)
     }
-    return handleResponse(data.value)
+    return handleResponse(response)
 }
 
 async function getDetailedPoints() {

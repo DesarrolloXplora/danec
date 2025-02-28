@@ -1,6 +1,6 @@
 <template>
   <Modal>
-  <div class="bg-white shadow rounded">
+  <div class="bg-white shadow rounded z-50">
     <!-- Header -->
     <div class="bg-main font-bold text-center text-xl text-white py-2">
       Finalizar Canje

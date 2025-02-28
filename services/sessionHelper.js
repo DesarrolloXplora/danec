@@ -4,14 +4,20 @@ import { useAccountStore } from '~/stores/account'
 
 export function authHeader() {
     const accountStore = useAccountStore()
-    return accountStore.user && accountStore.user.token
+    const router = useRouter()
+    if (accountStore.user == null) {
+        router.push('/')
+    }
+    return accountStore.user.token
         ? { Authorization: 'Bearer ' + accountStore.user.token }
         : {}
 }
 
 export function logout() {
+    const router = useRouter()
     const accountStore = useAccountStore()
     accountStore.logout()
+    router.push('/')
 }
 
 export function handleResponse(response) {
@@ -20,7 +26,7 @@ export function handleResponse(response) {
         if (process.client) {
             const router = useRouter()
             logout()
-            router.push('/login')
+            router.push('/')
         }
     }
     return response

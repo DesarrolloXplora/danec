@@ -63,11 +63,11 @@
             </div>
           </div>
           <!-- Continue Button -->
-          <div class="mt-4 text-right">
+          <div class="mt-4 text-center">
             <button
                 v-if="!dialog"
                 @click="dialog = true"
-                class="bg-main  text-white font-bold uppercase px-4 py-2 rounded"
+                class="bg-main text-white font-bold uppercase px-4 py-2 rounded"
             >
               Continuar
             </button>
@@ -85,7 +85,7 @@
       </div>
     </div>
     <!-- Exchange Modal -->
-    <Exchange v-if="dialog" @exchanged="afterExchange" @close="dialog = false" />
+    <Exchange v-if="dialog" @exchanged="afterExchange" @close="dialog = false" class="z-30"/>
   </div>
 </template>
 

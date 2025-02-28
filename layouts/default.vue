@@ -10,7 +10,7 @@
       <!-- Navigation Links -->
       <ul class="hidden md:flex gap-12 uppercase text-sm">
         <li>
-          <NuxtLink to="/">Inicio</NuxtLink>
+          <NuxtLink to="/inicio">Inicio</NuxtLink>
         </li>
         <li>
           <NuxtLink to="/como-funciona">¿CÓMO GANO?</NuxtLink>
@@ -52,9 +52,9 @@
               Mi Cuenta
             </NuxtLink>
             <NuxtLink
-                to="/login"
+                to="/"
                 class="block px-4 py-2 hover:bg-gray-100"
-                @click="closeDropdown"
+                @click="logout"
             >
               Salir
             </NuxtLink>
@@ -94,7 +94,7 @@
             <NuxtLink to="/mi-cuenta" @click="toggleMobileMenu">Mi Cuenta</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/login" @click="toggleMobileMenu">Salir</NuxtLink>
+            <NuxtLink to="/pages/inicio" @click="toggleMobileMenu">Salir</NuxtLink>
           </li>
         </ul>
       </div>
@@ -115,6 +115,7 @@ import { useRoute } from 'vue-router'
 import { useNotifications } from '~/composables/useNotifications.js'
 import { userService } from "~/services/userService.js";
 import { useAccountStore } from "~/stores/account.js";
+import { logout } from "~/services/sessionHelper.js";
 const accountStore = useAccountStore()
 
 const route = useRoute()

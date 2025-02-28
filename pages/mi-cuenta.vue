@@ -65,6 +65,34 @@
                 />
               </div>
             </div>
+            <div class="py-1" v-if="user.terms">
+              <label class="block uppercase text-sm font-[400] mb-1">
+                Categoría *
+              </label>
+              <select
+                  v-model="categoria"
+                  class="w-full uppercase border-0 font-[700] border-b border-dotted border-black focus:border-gray-500 focus:outline-none"
+              >
+                <option disabled value="">Seleccione una opción</option>
+                <option value="option1">Panaderías</option>
+                <option value="option2">Horeca</option>
+              </select>
+            </div>
+            <div class="py-1" v-if="user.terms">
+              <label class="block uppercase text-sm font-[400] mb-1">
+                Perfil *
+              </label>
+              <select
+                  v-model="profile"
+                  class="w-full uppercase border-0 font-[700] border-b border-dotted border-black focus:border-gray-500 focus:outline-none"
+              >
+                <option disabled value="">Seleccione una opción</option>
+                <option value="option1">Panificador</option>
+                <option value="option2">Pastelero</option>
+                <option value="option3">Cocinero</option>
+                <option value="option4">Chef</option>
+              </select>
+            </div>
           </div>
           <!-- Checkboxes -->
           <div class="mt-4">
@@ -129,6 +157,8 @@ const accountStore = useAccountStore()
 // Reactive state and sample data
 const dialog = ref(false)
 const participant = ref(true)
+const categoria = ref('')
+const profile = ref('')
 
 const { user } = storeToRefs(accountStore)
 
@@ -145,8 +175,8 @@ const fields = ref([
   { index: 6, type: 'text', value: '', name: 'Ciudad', id: 'city', disabled: false },
   { index: 6, type: 'text', value: '', name: 'Barrio', id: 'province', disabled: false },
   { index: 6, type: 'text', value: '', name: 'Dirección', id: 'address', disabled: false },
-  { index: 6, type: 'text', value: '', name: 'Perfil', id: 'category', disabled: true },
-  { index: 6, type: 'text', value: '', name: 'Categoría', id: 'position_name', disabled: true }
+ // { index: 6, type: 'text', value: '', name: 'Perfil', id: 'category', disabled: true },
+  // { index: 6, type: 'text', value: '', name: 'Categoría', id: 'position_name', disabled: true }
   // Add additional fields as necessary
 ])
 
@@ -176,7 +206,7 @@ function saveAccount() {
   if (userBody.error === undefined) {
     userService.update(userBody).then(response => {
       accountStore.setUser(response)
-      router.push('/')
+      router.push('/inicio')
     }).catch({
       // console.log(error)
     })
@@ -200,6 +230,8 @@ function bodyQuery (validate = true) {
   })
   body.habeas_data = user.value.terms
   body.terms = user.value.terms
+  body.extra_info.profile = profile
+  body.extra_info.categoria = categoria
   return body
 }
 
