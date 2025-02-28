@@ -31,6 +31,7 @@
               v-for="offer in offers"
               :key="offer.id"
               :product="offer.product"
+              :quantity="offer.quantity"
               :catalogId="catalog.id"
               @redeem="addCartItem"
               @showdetail="openProductDetail"

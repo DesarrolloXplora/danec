@@ -36,10 +36,13 @@
           >
             Entrar
           </button>
+          <span class="text-sm text-white flex items-center gap-1 cursor-pointer">
+            Olvidé mi contraseña
+          </span>
         </form>
       </div>
-      <div class="self-center mt-4 flex flex-col items-center" @click="goToDanec">
-        <span class="text-sm text-white flex items-center gap-1 cursor-pointer">
+      <div class="self-center mt-4 flex flex-col items-center cursor-pointer" @click="goToDanec">
+        <span class="text-sm text-white flex items-center gap-1 ">
           click aquí
           <span class="material-icons text-sm">keyboard_arrow_down</span>
         </span>

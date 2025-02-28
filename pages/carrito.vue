@@ -102,24 +102,15 @@ const router = useRouter()
 const accountStore = useAccountStore()
 const cartItemStore = useCartItemStore()
 
-// Local reactive state
 const dialog = ref(false)
 const buying = ref(null)
 
-// Computed: total points from the account store
 const totalPoints = computed(() => accountStore.currentPoints)
 
-// Computed: list of PDVs from the account store
-const pdvs = computed(() => {
-  return accountStore.points ? Object.values(accountStore.points) : []
-})
-
-// Computed: filter cart items for the active PDV
 const cartItems = computed(() => {
   return cartItemStore.cart
 })
 
-// Navigation helper
 function goBack() {
   router.back()
 }
@@ -130,7 +121,6 @@ function selectPdv(selectedValue) {
   buying.value = selectedValue
 }
 
-// Order function: increase or decrease item quantity
 async function order(item, add) {
   if (add && totalPoints.value < item.product.price) {
     alert(
@@ -150,8 +140,6 @@ async function order(item, add) {
     }
   }
   try {
-    // Call the service method to update the item
-    // Here we assume that increaseItem (or a similar method) is implemented in your cartItemStore
     await cartItemStore.increaseItem({
       product: item.product.id,
       quantity: item.quantity,
@@ -177,9 +165,7 @@ function afterExchange(answer) {
 
 // On mount, load points if not available and set PDV selection
 onMounted(async () => {
-  if (!accountStore.using) {
-    await loadPoints()
-  }
+  await loadPoints()
   if (!buying.value) {
     buying.value = accountStore.using
   }

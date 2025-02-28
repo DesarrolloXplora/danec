@@ -85,11 +85,7 @@ const props = defineProps({
 const emit = defineEmits(['filter', 'points'])
 const accountStore = useAccountStore()
 
-const totalPoints = computed(() => {
-  return accountStore.using && accountStore.points && accountStore.points[accountStore.using]
-      ? accountStore.points[accountStore.using].total
-      : 0
-})
+const totalPoints = computed(() => accountStore.currentPoints)
 
 // Set minimum and maximum values from the pointsFilter or defaults.
 const minValue = ref(1)

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-bg h-full">
+  <div class="form-bg h-full bg-white">
     <div class="container mx-auto md:px-16 py-6 h-full">
       <div class="flex flex-col md:flex-row justify-center items-start">
         <!-- Left Column -->
@@ -28,7 +28,7 @@
                     :style="{ width: Math.ceil(barSkill) + '%', backgroundColor: '#faa55c' }"
                     class="h-full rounded-full"
                 ></div>
-                <div class="absolute text-white inset-0 flex justify-center items-center  rounded-full">
+                <div class="absolute text-white inset-0 flex justify-center items-center rounded-full">
                   <strong>{{ Math.ceil(barSkill) }}%</strong>
                 </div>
               </div>
@@ -85,7 +85,7 @@
           </div>
           <!-- Save Button -->
           <div class="mt-6 text-center">
-            <button @click="saveAccount" class="bg-primary_color text-white px-6 py-2 rounded">
+            <button @click="saveAccount" class="bg-main text-white px-6 py-2 rounded">
               {{ filled ? 'Actualizar' : 'Actualizar y continuar' }}
             </button>
           </div>
@@ -118,62 +118,143 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAccountStore } from '~/stores/account'
+import { userService } from '~/services/userService'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const accountStore = useAccountStore()
 // Reactive state and sample data
 const dialog = ref(false)
-const user = ref({
-  avatar: '',
-  terms: false
-})
-const barSkill = ref(50)
+const participant = ref(true)
+
+const { user } = storeToRefs(accountStore)
 
 const fields = ref([
-  { index: 1, type: 'text', value: 'Pedro', name: 'Nombre', disabled: false },
-  { index: 2, type: 'text', value: 'Gomez', name: 'Apellido', disabled: false },
-  { index: 3, type: 'number', value: '5432123', name: 'Cédula', disabled: false },
-  { index: 4, type: 'text', value: '12-12-93', name: 'Fecha de nacimiento', disabled: false },
-  { index: 3, type: 'number', value: '5432123', name: 'Celular', disabled: false },
-  { index: 4, type: 'text', value: '12-12-93', name: 'Fecha de vencimiento cédula', disabled: false },
-  { index: 5, type: 'number', value: '32323344', name: 'RUC', disabled: false },
-  { index: 6, type: 'text', value: 'Pastelería S.A', name: 'Razón Social', disabled: false },
-  { index: 6, type: 'text', value: '123123', name: 'Código de Cliente', disabled: false },
-  { index: 6, type: 'text', value: 'Cuenca', name: 'Ciudad', disabled: false },
-  { index: 6, type: 'text', value: 'Cuenca', name: 'Barrio', disabled: false },
-  { index: 6, type: 'text', value: 'Cuenca', name: 'Dirección', disabled: false },
-  { index: 6, type: 'text', value: 'Panaderías', name: 'Categoría', disabled: true }
+  { index: 1, type: 'text', value: '', name: 'Nombre', id: 'name', disabled: false },
+  { index: 2, type: 'text', value: '', name: 'Apellido', id: 'name_canonical', disabled: false },
+  { index: 3, type: 'number', value: '', name: 'Cédula', id: 'id_number', disabled: false },
+  { index: 4, type: 'text', value: '', name: 'Fecha de nacimiento', id: 'birth', disabled: false },
+  { index: 3, type: 'number', value: '', name: 'Celular', id: 'telephone', disabled: false },
+  { index: 4, type: 'text', value: '', name: 'Fecha de vencimiento cédula', id: 'emisionDni', disabled: false },
+  { index: 5, type: 'number', value: '', name: 'RUC', id: 'username', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Razón Social', id: 'company_name', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Código de Cliente', id: 'code', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Ciudad', id: 'city', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Barrio', id: 'province', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Dirección', id: 'address', disabled: false },
+  { index: 6, type: 'text', value: '', name: 'Perfil', id: 'category', disabled: true },
+  { index: 6, type: 'text', value: '', name: 'Categoría', id: 'position_name', disabled: true }
   // Add additional fields as necessary
 ])
+
+onMounted(() => {
+  loadAccount()
+})
 
 // A computed property to check if fields are filled
 const filled = computed(() => fields.value.every(field => field.value && !field.disabled))
 
-// Methods for handling file input and saving data
-function onFileChange(file: File | File[]) {
-  if (Array.isArray(file)) {
-    file = file[0]
+const barSkill = computed(() => ((fields.value.filter(f => f.model !== undefined).length) / (fields.value.length) * 100))
+function onFileChange(files) {
+  let file = Array.isArray(files) ? files[0] : files
+  if (file) {
+    // For immediate preview update:
+    accountStore.user.avatar = URL.createObjectURL(file)
+    // Optionally, store the file in a local ref to be used in saveImage().
+    selectedFile.value = file
   }
-  // For preview purposes, update the user's avatar with an object URL
-  user.value.avatar = URL.createObjectURL(file)
 }
+
+const selectedFile = ref(null)
 
 function saveAccount() {
-  // Implement your save logic here (e.g. API calls, form validation, etc.)
-  console.log('Account data:', { fields: fields.value, user: user.value })
+
+  let userBody = bodyQuery()
+  if (userBody.error === undefined) {
+    userService.update(userBody).then(response => {
+      accountStore.setUser(response)
+      router.push('/')
+    }).catch({
+      // console.log(error)
+    })
+  } else {
+    alert('Complete todos los campos')
+  }
+}
+function bodyQuery (validate = true) {
+  let body = {
+    id: user.value.id,
+    extra_info: {}
+  }
+  fields.value.find(f => {
+    if (validate && f.value === undefined) {
+      f.error = true
+      body.error = true
+    }
+    if (user.hasOwnProperty(f.id)) {
+      body[f.id] = f.value
+    }
+  })
+  body.habeas_data = user.value.terms
+  body.terms = user.value.terms
+  return body
 }
 
-function saveImage() {
-  // Implement your image save logic here
-  console.log('Image saved')
-  dialog.value = false
+async function saveImage() {
+  if (!selectedFile.value) {
+    console.error('No file selected')
+    return
+  }
+  try {
+    await accountStore.updateUserPicture(selectedFile.value)
+    console.log('User picture updated:', accountStore.user.avatar)
+  } catch (error) {
+    console.error('Error updating user picture:', error)
+  }
+}
+function loadAccount() {
+  let index = fields.value.length
+  if (user.value.extra_info === null) {
+    user.value.extra_info = {}
+  }
+  while (index--) {
+    if (!participant.value) {
+      if (fields.value[index].id === 'name' || fields.value[index].id === 'id_number') {
+        fields.value.splice(index, 1)
+      }
+    }
+    if (fields.value[index] !== undefined) {
+      if (user.value.hasOwnProperty(fields.value[index].id)) { // search in user properties
+        fields.value[index].value = user.value[fields.value[index].id]
+      } else if (
+          fields.value[index].id === 'name' ||
+          fields.value[index].id === 'company_id'
+      ) {
+        const id = fields.value[index].id !== 'company_id' ? fields.value[index].id : 'id_number'
+        fields.value[index].value = user.value.company ? user.value.company[id] : ''
+        fields.value[index].disabled = true
+      } else if (
+          fields.value[index].id === 'position_name'
+      ) {
+        fields.value[index].value = user.value.position ? user.value.position[name] : ''
+        fields.value[index].disabled = true
+      } else {
+        fields.value[index].value = user.value.extra_info
+            ? user.value.extra_info[fields.value[index].id]
+            : ''
+      }
+    }
+  }
 }
 </script>
 <style>
 .form-bg {
   background: url("https://storage.googleapis.com/static-content-seed/danec/formulario.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
 }
 </style>

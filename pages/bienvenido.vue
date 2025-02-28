@@ -32,7 +32,7 @@ const name_canonical = computed(() => user.value?.name_canonical || '')
 const company_name = computed(() => user.value?.company_name || '')
 
 const submitForm = () => {
-  router.push('/')
+  router.push('/mi-cuenta')
 }
 </script>
 <style>

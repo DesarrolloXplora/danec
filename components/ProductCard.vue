@@ -1,7 +1,7 @@
 <template>
   <div class="border rounded shadow-sm w-full relative flex flex-col justify-end">
-    <div v-if="product.quantity === 0" class="absolute top-0 left-0 z-10">
-      <div class="bg-main text-white font-[700] text-center uppercase -translate-x-2 -rotate-[30deg] origin-right" style="width: 220px;">
+    <div v-if="quantity === 0" class="absolute top-5 left-0 z-10">
+      <div class="bg-main text-white font-[700] text-center uppercase -translate-x-10 -rotate-[40deg] origin-right" style="width: 250px;">
         Agotado
       </div>
     </div>
@@ -36,6 +36,10 @@ const props = defineProps({
     required: true
   },
   catalogId: {
+    type: [String, Number],
+    required: true
+  },
+  quantity: {
     type: [String, Number],
     required: true
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto mt-20 px-4">
+  <div class="container mx-auto mt-10 px-4">
     <!-- Fila 1 -->
     <div class="flex flex-wrap -mx-4">
       <!-- Columna izquierda: Pilar -->

@@ -48,11 +48,39 @@ export const useAccountStore = defineStore('account', {
             this.using = null
         },
         updatePoints(points) {
-            this.points = points
+            console.log('points', points)
+            if(points !== undefined) this.points = points
         },
         updateUsing(pdv) {
             this.using = pdv
-        }
+        },
+        async updateUserData(updatedData) {
+            try {
+                // Call the userService update method
+                const updatedUser = await userService.update(updatedData)
+                // Merge updated fields into our existing user state
+                this.user = { ...this.user, ...updatedUser }
+                return updatedUser
+            } catch (error) {
+                console.error('Error updating user data', error)
+                throw error
+            }
+        },
+        async updateUserPicture(file) {
+            try {
+                // Create FormData and append the file
+                const formData = new FormData()
+                formData.append('file', file)
+                // Call the userService to update the photo, using the user id
+                const updatedUser = await userService.putPhoto(formData, this.user.id)
+                // Update the avatar in our state (assumes response returns updated avatar URL)
+                this.user.avatar = updatedUser.avatar || this.user.avatar
+                return updatedUser
+            } catch (error) {
+                console.error('Error updating user picture', error)
+                throw error
+            }
+        },
     },
     persist: {
         enabled: process.client,

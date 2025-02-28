@@ -22,6 +22,9 @@
           <NuxtLink to="/catalogo">Catálogo</NuxtLink>
         </li>
         <li>
+          <NuxtLink to="/carrito">Carrito</NuxtLink>
+        </li>
+        <li>
           <NuxtLink to="/mis-canjes">Mis Canjes</NuxtLink>
         </li>
       </ul>
@@ -81,6 +84,9 @@
             <NuxtLink to="/catalogo">Catálogo</NuxtLink>
           </li>
           <li>
+            <NuxtLink to="/carrito">Carrito</NuxtLink>
+          </li>
+          <li>
             <NuxtLink to="/mis-canjes">Mis Canjes</NuxtLink>
           </li>
           <!-- Optionally include profile links within mobile menu -->
@@ -95,13 +101,9 @@
     </transition>
   </header>
   <slot></slot>
-  <div v-if="showFloatingButton" class="companion w-screen sticky">
-    <div class="flex flex-wrap mt-8">
-      <div class="w-full md:w-5/12 md:ml-auto px-4">
-        <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" @click="goToDanec"
-             alt="Logo" class="w-44 float-right cursor-pointer drop-shadow-md" />
-      </div>
-    </div>
+  <div v-if="showFloatingButton" class="companion w-screen sticky pr-10 z-10">
+    <img src="https://storage.googleapis.com/static-content-seed/danec/logo-home.png" @click="goToDanec"
+         alt="Logo" class="w-44 absolute right-2 bottom-1 cursor-pointer drop-shadow-md" />
   </div>
   <Notification />
   </div>
@@ -150,6 +152,7 @@ onMounted(() => {
   onClickOutside(dropdownRef, () => {
     isOpen.value = false
   })
+  loadPoints()
 })
 </script>
 

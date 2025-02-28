@@ -105,7 +105,7 @@ const points = ref([
 }
 .indicator-img{
   width: 3rem;
-  height: 3rem;
+  height: auto;
   position: absolute;
   left: 0;
   filter: brightness(0) invert(1);
